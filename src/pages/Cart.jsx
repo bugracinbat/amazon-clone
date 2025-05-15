@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useCart } from "../components/CartContext";
+import { useState } from "react";
 
 const Container = styled.div`
   padding: 2rem;
@@ -83,8 +84,34 @@ const Total = styled.div`
   margin-top: 2rem;
 `;
 
+const CheckoutButton = styled.button`
+  background: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-left: auto;
+  display: block;
+  transition: background 0.2s;
+  &:hover {
+    background: #0366d6;
+  }
+`;
+
+const ThankYou = styled.div`
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.5rem;
+  color: #0070f3;
+  font-weight: 700;
+`;
+
 function Cart() {
-  const { cart, removeFromCart, addToCart, setQty } = useCart();
+  const { cart, removeFromCart, addToCart, setQty, clearCart } = useCart();
+  const [checkedOut, setCheckedOut] = useState(false);
   const total = cart
     .reduce((sum, item) => sum + Number(item.price) * item.qty, 0)
     .toFixed(2);
@@ -99,6 +126,15 @@ function Cart() {
 
   function increaseQty(item) {
     setQty(item.id, item.qty + 1);
+  }
+
+  function handleCheckout() {
+    clearCart();
+    setCheckedOut(true);
+  }
+
+  if (checkedOut) {
+    return <ThankYou>Thank you for your purchase! 🎉</ThankYou>;
   }
 
   return (
@@ -124,6 +160,7 @@ function Cart() {
             </Item>
           ))}
           <Total>Total: ${total}</Total>
+          <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
         </div>
       )}
     </Container>
