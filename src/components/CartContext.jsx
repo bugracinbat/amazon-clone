@@ -17,6 +17,14 @@ export function CartProvider({ children }) {
     });
   }
 
+  function setQty(id, qty) {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, qty: Math.max(1, qty) } : item
+      )
+    );
+  }
+
   function removeFromCart(id) {
     setCart((prev) => prev.filter((item) => item.id !== id));
   }
@@ -27,7 +35,7 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart, setQty }}
     >
       {children}
     </CartContext.Provider>

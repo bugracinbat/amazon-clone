@@ -121,8 +121,13 @@ function Header() {
           Home
         </NavLink>
         <NavLink
-          to="/"
-          className={location.pathname.startsWith("/product") ? "active" : ""}
+          to="/products"
+          className={
+            location.pathname.startsWith("/products") ||
+            location.pathname.startsWith("/product")
+              ? "active"
+              : ""
+          }
         >
           Products
         </NavLink>

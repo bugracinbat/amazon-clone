@@ -41,6 +41,25 @@ const Price = styled.div`
 const Qty = styled.div`
   font-size: 1rem;
   margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const QtyButton = styled.button`
+  background: #fafafa;
+  color: #111;
+  border: 1px solid #eaeaea;
+  border-radius: 0;
+  padding: 0.2em 0.7em;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+  &:hover {
+    background: #eaeaea;
+    border: 1px solid #0070f3;
+  }
 `;
 
 const Remove = styled.button`
@@ -65,10 +84,22 @@ const Total = styled.div`
 `;
 
 function Cart() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, addToCart, setQty } = useCart();
   const total = cart
     .reduce((sum, item) => sum + Number(item.price) * item.qty, 0)
     .toFixed(2);
+
+  function decreaseQty(item) {
+    if (item.qty === 1) {
+      removeFromCart(item.id);
+    } else {
+      setQty(item.id, item.qty - 1);
+    }
+  }
+
+  function increaseQty(item) {
+    setQty(item.id, item.qty + 1);
+  }
 
   return (
     <Container>
@@ -83,7 +114,11 @@ function Cart() {
               <Info>
                 <Title>{item.title}</Title>
                 <Price>${item.price}</Price>
-                <Qty>Quantity: {item.qty}</Qty>
+                <Qty>
+                  <QtyButton onClick={() => decreaseQty(item)}>-</QtyButton>
+                  {item.qty}
+                  <QtyButton onClick={() => increaseQty(item)}>+</QtyButton>
+                </Qty>
               </Info>
               <Remove onClick={() => removeFromCart(item.id)}>Remove</Remove>
             </Item>
