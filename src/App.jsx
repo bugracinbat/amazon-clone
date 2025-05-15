@@ -9,6 +9,7 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Products from "./pages/Products";
 import { CartProvider } from "./components/CartContext";
+import NotFound from "./pages/NotFound";
 
 const Root = styled.div`
   max-width: 1280px;
@@ -61,6 +62,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </CartProvider>

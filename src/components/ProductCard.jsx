@@ -1,5 +1,10 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+`;
 
 const Card = styled(Link)`
   background: #fff;
@@ -13,7 +18,9 @@ const Card = styled(Link)`
   text-decoration: none;
   color: #111;
   min-height: 370px;
+  height: 100%;
   position: relative;
+  animation: ${fadeIn} 0.5s;
   &:hover {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px) scale(1.01);
@@ -47,11 +54,12 @@ const Description = styled.p`
   font-size: 0.97rem;
   color: #444;
   margin: 0 0 0.7rem 0;
-  max-height: 2.7em;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
 `;
 
 const Price = styled.div`
@@ -69,7 +77,11 @@ const Rating = styled.div`
 
 function ProductCard({ product }) {
   return (
-    <Card to={`/product/${product.id}`}>
+    <Card
+      to={`/product/${product.id}`}
+      tabIndex={0}
+      aria-label={`View details for ${product.title}`}
+    >
       <Image src={product.image} alt={product.title} />
       <Title title={product.title}>{product.title}</Title>
       <Description title={product.description}>

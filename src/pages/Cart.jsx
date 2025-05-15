@@ -6,6 +6,24 @@ const Container = styled.div`
   padding: 2rem;
   max-width: 900px;
   margin: 0 auto;
+  @media (max-width: 600px) {
+    padding: 4vw 1vw 8vw 1vw;
+  }
+`;
+
+const EmptyState = styled.div`
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const EmptyEmoji = styled.div`
+  font-size: 3rem;
+  margin-bottom: 1rem;
 `;
 
 const Item = styled.div`
@@ -99,6 +117,11 @@ const CheckoutButton = styled.button`
   &:hover {
     background: #0366d6;
   }
+  @media (max-width: 600px) {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 1.1rem 0;
+  }
 `;
 
 const ThankYou = styled.div`
@@ -141,7 +164,10 @@ function Cart() {
     <Container>
       <h2>Your Cart</h2>
       {cart.length === 0 ? (
-        <p>Your shopping cart is empty.</p>
+        <EmptyState>
+          <EmptyEmoji>🛒</EmptyEmoji>
+          Your shopping cart is empty.
+        </EmptyState>
       ) : (
         <div>
           {cart.map((item) => (

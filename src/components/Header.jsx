@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -12,6 +13,12 @@ const HeaderContainer = styled.header`
   padding: 1.5rem 3vw 1.5rem 3vw;
   color: #111;
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: ${({ $scrolled }) =>
+    $scrolled ? "0 2px 16px rgba(0,0,0,0.07)" : "none"};
+  transition: box-shadow 0.25s;
 `;
 
 const LogoWrap = styled(Link)`
@@ -110,8 +117,14 @@ function Header() {
   const { cart } = useCart();
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <HeaderContainer>
+    <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
         <Triangle />
         <LogoText>Mercel</LogoText>
