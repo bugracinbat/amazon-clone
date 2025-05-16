@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import products from "../assets/products";
 import { useCart } from "../components/CartContext";
 import { useState } from "react";
+import ProductCard from "../components/ProductCard";
 
 const Container = styled.div`
   padding: 2rem;
@@ -146,6 +147,10 @@ function Product() {
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [userReviews, setUserReviews] = useState([]);
+  const navigate = useNavigate();
 
   if (!product) {
     return (
@@ -167,48 +172,181 @@ function Product() {
       text: "Product as described. Would buy again.",
       rating: 4,
     },
+    ...userReviews,
   ];
 
+  // Related products: show 4 random others
+  const related = products.filter((p) => p.id !== product.id).slice(0, 4);
+
+  // Placeholder details
+  const brand = "Acme";
+  const category = "Electronics";
+  const sku = product.id.slice(0, 8).toUpperCase();
+  const stock = 12;
+
+  function handleBuyNow() {
+    addToCart({ ...product, qty });
+    navigate("/cart");
+  }
+
+  function handleReviewSubmit(e) {
+    e.preventDefault();
+    if (!reviewText) return;
+    setUserReviews([
+      ...userReviews,
+      { name: "You", text: reviewText, rating: reviewRating },
+    ]);
+    setReviewText("");
+    setReviewRating(5);
+  }
+
   return (
-    <Container>
-      <ImageWrap>
-        <Image src={product.image} alt={product.title} />
-      </ImageWrap>
-      <Details>
-        <div style={{ marginBottom: "0.5rem" }}>
-          <Badge>In Stock</Badge>
-          <FreeShipping>Free Shipping</FreeShipping>
-        </div>
-        <Title>{product.title}</Title>
-        <Price>${product.price}</Price>
-        <Rating>
-          {"★".repeat(product.rating)}
-          {"☆".repeat(5 - product.rating)}
-        </Rating>
-        <Description>{product.description}</Description>
-        <QuantityWrap>
-          <span style={{ fontWeight: 600 }}>Quantity:</span>
-          <QtyButton onClick={() => setQty(qty > 1 ? qty - 1 : 1)}>-</QtyButton>
-          {qty}
-          <QtyButton onClick={() => setQty(qty + 1)}>+</QtyButton>
-        </QuantityWrap>
-        <Button onClick={() => addToCart({ ...product, qty })}>
-          Add to Cart
-        </Button>
-        <ReviewsSection>
-          <ReviewTitle>Customer Reviews</ReviewTitle>
-          {reviews.map((r, i) => (
-            <Review key={i}>
-              <Reviewer>
-                {r.name} {"★".repeat(r.rating)}
-                {"☆".repeat(5 - r.rating)}
-              </Reviewer>
-              <div>{r.text}</div>
-            </Review>
+    <div style={{ width: "100%" }}>
+      {/* Breadcrumb */}
+      <div style={{ margin: "1rem 0", fontSize: "0.98rem" }}>
+        <Link to="/">Home</Link> &gt; <Link to="/products">Products</Link> &gt;{" "}
+        {product.title}
+      </div>
+      <Container>
+        <ImageWrap>
+          <Image src={product.image} alt={product.title} />
+        </ImageWrap>
+        <Details>
+          <div style={{ marginBottom: "0.5rem" }}>
+            <Badge>In Stock</Badge>
+            <FreeShipping>Free Shipping</FreeShipping>
+          </div>
+          <Title>{product.title}</Title>
+          {/* More product details */}
+          <div
+            style={{ marginBottom: "1rem", color: "#444", fontSize: "1.02rem" }}
+          >
+            <div>
+              <b>Brand:</b> {brand}
+            </div>
+            <div>
+              <b>Category:</b> {category}
+            </div>
+            <div>
+              <b>SKU:</b> {sku}
+            </div>
+            <div>
+              <b>Stock:</b> {stock > 0 ? stock : "Out of stock"}
+            </div>
+          </div>
+          <Price>${product.price}</Price>
+          <Rating>
+            {"★".repeat(product.rating)}
+            {"☆".repeat(5 - product.rating)}
+          </Rating>
+          <Description>{product.description}</Description>
+          <QuantityWrap>
+            <span style={{ fontWeight: 600 }}>Quantity:</span>
+            <QtyButton onClick={() => setQty(qty > 1 ? qty - 1 : 1)}>
+              -
+            </QtyButton>
+            {qty}
+            <QtyButton onClick={() => setQty(qty + 1)}>+</QtyButton>
+          </QuantityWrap>
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              width: "100%",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <Button
+              onClick={() => addToCart({ ...product, qty })}
+              style={{ flex: 1 }}
+            >
+              Add to Cart
+            </Button>
+            <Button
+              onClick={handleBuyNow}
+              style={{ flex: 1, background: "#ffa41c" }}
+            >
+              Buy Now
+            </Button>
+          </div>
+          <ReviewsSection>
+            <ReviewTitle>Customer Reviews</ReviewTitle>
+            {reviews.map((r, i) => (
+              <Review key={i}>
+                <Reviewer>
+                  {r.name} {"★".repeat(r.rating)}
+                  {"☆".repeat(5 - r.rating)}
+                </Reviewer>
+                <div>{r.text}</div>
+              </Review>
+            ))}
+            {/* Review form */}
+            <form
+              onSubmit={handleReviewSubmit}
+              style={{ marginTop: "1.5rem", width: "100%" }}
+            >
+              <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                Add a Review
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginBottom: 8,
+                }}
+              >
+                <span>Rating:</span>
+                <select
+                  value={reviewRating}
+                  onChange={(e) => setReviewRating(Number(e.target.value))}
+                  style={{ fontSize: "1rem" }}
+                >
+                  {[5, 4, 3, 2, 1].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                rows={3}
+                placeholder="Write your review..."
+                style={{
+                  width: "100%",
+                  marginBottom: 8,
+                  padding: 8,
+                  borderRadius: 4,
+                  border: "1px solid #eaeaea",
+                }}
+                required
+              />
+              <Button type="submit" style={{ width: 160 }}>
+                Submit Review
+              </Button>
+            </form>
+          </ReviewsSection>
+        </Details>
+      </Container>
+      {/* Related products */}
+      <div style={{ maxWidth: 900, margin: "3rem auto 0 auto", width: "100%" }}>
+        <h3 style={{ fontSize: "1.15rem", fontWeight: 700, marginBottom: 16 }}>
+          Related Products
+        </h3>
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+          {related.map((p) => (
+            <div
+              key={p.id}
+              style={{ flex: "1 1 180px", minWidth: 180, maxWidth: 220 }}
+            >
+              <ProductCard product={p} />
+            </div>
           ))}
-        </ReviewsSection>
-      </Details>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }
 
