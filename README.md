@@ -1,12 +1,44 @@
-# React + Vite
+# Mercel Market 🛍️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Screenshot](screenshot.png)
 
-Currently, two official plugins are available:
+<sub><i>Replace <code>screenshot.png</code> with your own screenshot for best results.</i></sub>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Discover. Shop. Smile. ✨
 
-## Expanding the ESLint configuration
+Welcome to Mercel Market, a modern Amazon-inspired shopping experience built with React and Vite. Dive into a world of deals, discover unique products, and enjoy a seamless shopping experience!
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+- Beautiful, responsive design with mobile-friendly navigation
+- Creative branding and engaging UI
+- Product grid with dynamic cards
+- Shopping cart with popup and animated icon
+- Fast, modern tech stack (React + Vite + styled-components)
+
+## Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+3. **Open your browser:**
+   Visit [http://localhost:5173](http://localhost:5173) to explore Mercel Market.
+
+## Project Structure
+
+- `src/components/` – UI components (Header, ProductCard, Cart, etc.)
+- `src/pages/` – Main pages (Home, NotFound, etc.)
+- `src/assets/` – Product data and images
+
+## Customization
+
+You can easily update products, styles, and branding to make Mercel Market your own.
+
+---
+
+Built with ❤️ using React, Vite, and styled-components.
