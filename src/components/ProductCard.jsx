@@ -1,12 +1,14 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
+import { useCart } from "./CartContext";
+import { useState } from "react";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
 `;
 
-const Card = styled(Link)`
+const Card = styled.div`
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.03);
@@ -15,7 +17,6 @@ const Card = styled(Link)`
   flex-direction: column;
   align-items: flex-start;
   transition: box-shadow 0.2s, transform 0.2s;
-  text-decoration: none;
   color: #111;
   min-height: 370px;
   height: 100%;
@@ -25,6 +26,13 @@ const Card = styled(Link)`
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px) scale(1.01);
   }
+`;
+
+const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  display: block;
 `;
 
 const Image = styled.img`
@@ -75,23 +83,58 @@ const Rating = styled.div`
   font-size: 1.05rem;
 `;
 
+const AddButton = styled.button`
+  background: #ffd814;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7em 1.2em;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-top: auto;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  &:hover,
+  &:focus {
+    background: #f7ca00;
+    color: #222;
+  }
+`;
+
 function ProductCard({ product }) {
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+
+  function handleAdd(e) {
+    e.preventDefault();
+    addToCart(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1000);
+  }
+
   return (
-    <Card
-      to={`/product/${product.id}`}
-      tabIndex={0}
-      aria-label={`View details for ${product.title}`}
-    >
-      <Image src={product.image} alt={product.title} />
-      <Title title={product.title}>{product.title}</Title>
-      <Description title={product.description}>
-        {product.description}
-      </Description>
-      <Price>${product.price}</Price>
-      <Rating>
-        {"★".repeat(product.rating)}
-        {"☆".repeat(5 - product.rating)}
-      </Rating>
+    <Card tabIndex={0} aria-label={`View details for ${product.title}`}>
+      <CardLink to={`/product/${product.id}`}>
+        <Image src={product.image} alt={product.title} />
+        <Title title={product.title}>{product.title}</Title>
+        <Description title={product.description}>
+          {product.description}
+        </Description>
+        <Price>${product.price}</Price>
+        <Rating>
+          {"★".repeat(product.rating)}
+          {"☆".repeat(5 - product.rating)}
+        </Rating>
+      </CardLink>
+      <AddButton
+        onClick={handleAdd}
+        aria-label={`Add ${product.title} to cart`}
+        disabled={added}
+      >
+        {added ? "Added!" : "Add to Cart"}
+      </AddButton>
     </Card>
   );
 }

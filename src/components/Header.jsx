@@ -3,6 +3,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import CartPopup from "./CartPopup";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -118,11 +119,15 @@ function Header() {
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  useEffect(() => {
+    setCartOpen(false);
+  }, [location]);
   return (
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
@@ -152,10 +157,21 @@ function Header() {
         </NavLink>
       </Nav>
       <SearchBar type="text" placeholder="Search products..." />
-      <Cart to="/cart">
-        <FaShoppingCart size={28} />
-        <CartCount>{count}</CartCount>
-      </Cart>
+      <div style={{ position: "relative" }}>
+        <Cart
+          to="#"
+          tabIndex={0}
+          aria-label="Open cart popup"
+          onClick={(e) => {
+            e.preventDefault();
+            setCartOpen((v) => !v);
+          }}
+        >
+          <FaShoppingCart size={28} />
+          <CartCount>{count}</CartCount>
+        </Cart>
+        <CartPopup open={cartOpen} onClose={() => setCartOpen(false)} />
+      </div>
     </HeaderContainer>
   );
 }

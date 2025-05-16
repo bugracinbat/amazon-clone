@@ -37,20 +37,27 @@ const SearchInput = styled.input`
 `;
 
 const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
 `;
 
-const Grid = styled.div`
+const GridBg = styled.div`
+  background: linear-gradient(135deg, #f8fafc 60%, #eaf1fb 100%);
+  border-radius: 24px;
+  padding: 3vw 2vw;
+  margin-top: 2vw;
+  @media (max-width: 600px) {
+    padding: 6vw 2vw;
+    border-radius: 12px;
+  }
+`;
+
+const MasonryGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2vw;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 2.5vw;
   width: 100%;
   animation: ${fadeIn} 0.5s;
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-    gap: 4vw;
-  }
 `;
 
 const EmptyState = styled.div`
@@ -75,14 +82,15 @@ const shimmer = keyframes`
 
 const SkeletonCard = styled.div`
   background: #f4f4f4;
-  border-radius: 10px;
+  border-radius: 18px;
   min-height: 370px;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.03);
+  border: 1.5px solid #ececec;
   position: relative;
   overflow: hidden;
   &::after {
@@ -123,22 +131,24 @@ function Products() {
           aria-label="Search products"
         />
       </SearchWrap>
-      <Grid>
-        {loading ? (
-          Array.from({ length: 8 }).map((_, i) => (
-            <SkeletonCard key={i} aria-label="Loading product" />
-          ))
-        ) : filtered.length === 0 ? (
-          <EmptyState>
-            <EmptyEmoji>🛒</EmptyEmoji>
-            No products found.
-          </EmptyState>
-        ) : (
-          filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))
-        )}
-      </Grid>
+      <GridBg>
+        <MasonryGrid>
+          {loading ? (
+            Array.from({ length: 8 }).map((_, i) => (
+              <SkeletonCard key={i} aria-label="Loading product" />
+            ))
+          ) : filtered.length === 0 ? (
+            <EmptyState>
+              <EmptyEmoji>🛒</EmptyEmoji>
+              No products found.
+            </EmptyState>
+          ) : (
+            filtered.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
+        </MasonryGrid>
+      </GridBg>
     </Container>
   );
 }
