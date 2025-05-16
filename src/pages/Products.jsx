@@ -55,7 +55,8 @@ const GridBg = styled.div`
 const MasonryGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 2.5vw;
+  column-gap: 2.5vw;
+  row-gap: 2.5vw;
   width: 100%;
   animation: ${fadeIn} 0.5s;
 `;

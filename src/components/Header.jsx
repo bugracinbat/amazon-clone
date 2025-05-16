@@ -4,12 +4,13 @@ import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CartPopup from "./CartPopup";
+import { keyframes } from "styled-components";
 
 const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid #eaeaea;
   padding: 1.5rem 3vw 1.5rem 3vw;
   color: #111;
@@ -19,7 +20,9 @@ const HeaderContainer = styled.header`
   z-index: 100;
   box-shadow: ${({ $scrolled }) =>
     $scrolled ? "0 2px 16px rgba(0,0,0,0.07)" : "none"};
-  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, background 0.25s;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
 `;
 
 const LogoWrap = styled(Link)`
@@ -114,11 +117,26 @@ const CartCount = styled.span`
   font-weight: 700;
 `;
 
+const cartBounce = keyframes`
+  0% { transform: scale(1); }
+  20% { transform: scale(1.18); }
+  40% { transform: scale(0.92); }
+  60% { transform: scale(1.08); }
+  80% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+`;
+
+const CartIconWrap = styled.span`
+  display: inline-block;
+  ${({ $bouncing }) => $bouncing && `animation: ${cartBounce} 0.6s;`}
+`;
+
 function Header() {
   const { cart, cartPopup, openCartPopup, closeCartPopup } = useCart();
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [bouncing, setBouncing] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
@@ -127,6 +145,14 @@ function Header() {
   useEffect(() => {
     closeCartPopup();
   }, [location]);
+  useEffect(() => {
+    const bounce = () => {
+      setBouncing(true);
+      setTimeout(() => setBouncing(false), 600);
+    };
+    window.addEventListener("cart-bounce", bounce);
+    return () => window.removeEventListener("cart-bounce", bounce);
+  }, []);
   return (
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
@@ -166,7 +192,9 @@ function Header() {
             cartPopup ? closeCartPopup() : openCartPopup();
           }}
         >
-          <FaShoppingCart size={28} />
+          <CartIconWrap $bouncing={bouncing}>
+            <FaShoppingCart size={28} />
+          </CartIconWrap>
           <CartCount>{count}</CartCount>
         </Cart>
         <CartPopup open={cartPopup} onClose={closeCartPopup} />

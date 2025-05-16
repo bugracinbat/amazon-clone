@@ -9,16 +9,26 @@ const Popup = styled.div`
   right: 0;
   width: 340px;
   max-height: 420px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-  border: 1.5px solid #ececec;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  border: 1.5px solid #e0e7ef;
   z-index: 9999;
   padding: 1.2rem 1.2rem 1rem 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   animation: fadeIn 0.2s;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  @media (max-width: 600px) {
+    width: 98vw;
+    left: 1vw;
+    right: 1vw;
+    top: 60px;
+    border-radius: 16px;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
   @keyframes fadeIn {
     from {
       opacity: 0;

@@ -8,9 +8,18 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: none; }
 `;
 
+const cardBounce = keyframes`
+  0% { transform: scale(1); }
+  20% { transform: scale(1.08); }
+  40% { transform: scale(0.96); }
+  60% { transform: scale(1.04); }
+  80% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+`;
+
 const Card = styled.div`
   background: #fff;
-  border-radius: 10px;
+  border-radius: 18px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1.5px 4px rgba(0, 0, 0, 0.03);
   padding: 1.5rem 1.2rem 1.2rem 1.2rem;
   display: flex;
@@ -18,13 +27,13 @@ const Card = styled.div`
   align-items: flex-start;
   transition: box-shadow 0.2s, transform 0.2s;
   color: #111;
-  min-height: 370px;
-  height: 100%;
+  height: 420px;
   position: relative;
   animation: ${fadeIn} 0.5s;
-  &:hover {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px) scale(1.01);
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.13);
+    transform: translateY(-3px) scale(1.025);
   }
 `;
 
@@ -112,6 +121,7 @@ function ProductCard({ product }) {
     addToCart(product);
     setAdded(true);
     openCartPopup();
+    window.dispatchEvent(new CustomEvent("cart-bounce"));
     setTimeout(() => setAdded(false), 1000);
   }
 

@@ -1,14 +1,25 @@
 :root {
-  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: "Inter", "DM Sans", system-ui, Avenir, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.6;
   font-weight: 400;
   color-scheme: light dark;
-  color: #111;
-  background-color: #fff;
+  color: #1a1a1a;
+  background: #f6f8fa;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  min-width: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f6f8fa 60%, #eaf1fb 100%);
+  color: #1a1a1a;
+  font-size: 1.08rem;
 }
 
 a {
@@ -21,15 +32,6 @@ a:hover {
   color: #0366d6;
 }
 
-body {
-  margin: 0;
-  width: 100vw;
-  min-width: 0;
-  min-height: 100vh;
-  background: #fff;
-  color: #111;
-}
-
 h1,
 h2,
 h3,
@@ -38,39 +40,42 @@ h5,
 h6 {
   font-weight: 700;
   margin: 0.5em 0 0.2em 0;
+  letter-spacing: -0.01em;
 }
 
 button {
-  border-radius: 0;
+  border-radius: 12px;
   border: none;
-  padding: 0.7em 1.5em;
-  font-size: 1em;
+  padding: 0.8em 1.7em;
+  font-size: 1.08em;
   font-weight: 600;
   font-family: inherit;
   background: #111;
   color: #fff;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  box-shadow: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   outline: none;
 }
-button:hover {
-  background: #222;
+button:hover,
+button:focus {
+  background: #0070f3;
   color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 112, 243, 0.08);
+  transform: translateY(-1px) scale(1.03);
 }
-button:focus,
-button:focus-visible {
-  outline: 2px solid #0070f3;
+button:active {
+  background: #0366d6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #fff;
-    background-color: #111;
+    color: #f6f8fa;
+    background-color: #181c20;
   }
   body {
-    background: #111;
-    color: #fff;
+    background: linear-gradient(135deg, #181c20 60%, #23272f 100%);
+    color: #f6f8fa;
   }
   a {
     color: #50b6ff;
@@ -80,10 +85,14 @@ button:focus-visible {
   }
   button {
     background: #fff;
-    color: #111;
+    color: #181c20;
   }
-  button:hover {
-    background: #eaeaea;
-    color: #111;
+  button:hover,
+  button:focus {
+    background: #0070f3;
+    color: #fff;
+  }
+  button:active {
+    background: #0366d6;
   }
 }
