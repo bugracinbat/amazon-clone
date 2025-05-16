@@ -2,8 +2,6 @@
 
 ![Screenshot](screenshot.png)
 
-<sub><i>Replace <code>screenshot.png</code> with your own screenshot for best results.</i></sub>
-
 Discover. Shop. Smile. ✨
 
 Welcome to Mercel Market, a modern Amazon-inspired shopping experience built with React and Vite. Dive into a world of deals, discover unique products, and enjoy a seamless shopping experience!
