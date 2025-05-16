@@ -4,6 +4,7 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [cartPopup, setCartPopup] = useState(false);
 
   function addToCart(product) {
     setCart((prev) => {
@@ -33,9 +34,26 @@ export function CartProvider({ children }) {
     setCart([]);
   }
 
+  function openCartPopup() {
+    setCartPopup(true);
+  }
+
+  function closeCartPopup() {
+    setCartPopup(false);
+  }
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, setQty }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        setQty,
+        cartPopup,
+        openCartPopup,
+        closeCartPopup,
+      }}
     >
       {children}
     </CartContext.Provider>

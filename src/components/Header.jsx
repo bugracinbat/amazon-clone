@@ -115,18 +115,17 @@ const CartCount = styled.span`
 `;
 
 function Header() {
-  const { cart } = useCart();
+  const { cart, cartPopup, openCartPopup, closeCartPopup } = useCart();
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => {
-    setCartOpen(false);
+    closeCartPopup();
   }, [location]);
   return (
     <HeaderContainer $scrolled={scrolled}>
@@ -164,13 +163,13 @@ function Header() {
           aria-label="Open cart popup"
           onClick={(e) => {
             e.preventDefault();
-            setCartOpen((v) => !v);
+            cartPopup ? closeCartPopup() : openCartPopup();
           }}
         >
           <FaShoppingCart size={28} />
           <CartCount>{count}</CartCount>
         </Cart>
-        <CartPopup open={cartOpen} onClose={() => setCartOpen(false)} />
+        <CartPopup open={cartPopup} onClose={closeCartPopup} />
       </div>
     </HeaderContainer>
   );

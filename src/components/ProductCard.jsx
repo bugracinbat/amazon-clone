@@ -104,13 +104,14 @@ const AddButton = styled.button`
 `;
 
 function ProductCard({ product }) {
-  const { addToCart } = useCart();
+  const { addToCart, openCartPopup } = useCart();
   const [added, setAdded] = useState(false);
 
   function handleAdd(e) {
     e.preventDefault();
     addToCart(product);
     setAdded(true);
+    openCartPopup();
     setTimeout(() => setAdded(false), 1000);
   }
 
