@@ -57,6 +57,20 @@ const LogoText = styled.span`
   letter-spacing: 1px;
 `;
 
+const Tagline = styled.span`
+  display: block;
+  font-size: 1.05rem;
+  color: #0070f3;
+  font-weight: 500;
+  margin-top: 0.1rem;
+  margin-left: 0.2rem;
+  letter-spacing: 0.5px;
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    margin-top: 0.05rem;
+  }
+`;
+
 const Nav = styled.nav`
   display: flex;
   align-items: center;
@@ -224,7 +238,22 @@ function Header() {
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
         <Triangle />
-        <LogoText>Mercel</LogoText>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            lineHeight: 1.1,
+          }}
+        >
+          <LogoText>Mercel Market</LogoText>
+          <Tagline>
+            Discover. Shop. Smile.{" "}
+            <span role="img" aria-label="sparkles">
+              ✨
+            </span>
+          </Tagline>
+        </div>
       </LogoWrap>
       <Nav>
         <NavLink to="/" className={location.pathname === "/" ? "active" : ""}>

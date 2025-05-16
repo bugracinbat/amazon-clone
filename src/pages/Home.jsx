@@ -21,11 +21,40 @@ const Grid = styled.div`
   }
 `;
 
+const CreativeTitle = styled.h2`
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #0070f3;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+`;
+
+const CreativeDesc = styled.p`
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+  @media (max-width: 600px) {
+    font-size: 1.08rem;
+  }
+`;
+
 function Home() {
   return (
     <Container>
-      <h2>Welcome to Amazon Clone</h2>
-      <p>Browse our products and enjoy shopping!</p>
+      <CreativeTitle>
+        Your Next Favorite Find Awaits{" "}
+        <span role="img" aria-label="shopping bags">
+          🛍️
+        </span>
+      </CreativeTitle>
+      <CreativeDesc>
+        Dive into a world of deals, discover unique products, and enjoy a
+        seamless shopping experience!
+      </CreativeDesc>
       <Grid>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
