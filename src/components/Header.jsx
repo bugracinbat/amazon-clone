@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import { useCart } from "./CartContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -62,6 +62,9 @@ const Nav = styled.nav`
   align-items: center;
   gap: 2.5rem;
   margin-left: 2rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -94,6 +97,9 @@ const SearchBar = styled.input`
   &:focus {
     border: 1px solid #0070f3;
     outline: none;
+  }
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -131,12 +137,73 @@ const CartIconWrap = styled.span`
   ${({ $bouncing }) => $bouncing && `animation: ${cartBounce} 0.6s;`}
 `;
 
+const Burger = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 120;
+  color: #0070f3;
+  padding: 0;
+  margin: 0;
+  @media (max-width: 768px) {
+    display: block;
+    margin-left: 1.2rem;
+  }
+  &:hover,
+  &:focus {
+    background: none;
+    box-shadow: none;
+    outline: none;
+  }
+`;
+
+const MobileMenu = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 70vw;
+  max-width: 320px;
+  background: #fff;
+  box-shadow: -2px 0 16px rgba(0, 0, 0, 0.08);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+  transform: translateX(${({ open }) => (open ? "0" : "100%")});
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
+const MobileNav = styled.nav`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+`;
+
+const MobileSearchBar = styled.input`
+  margin: 1.5rem 0 0.5rem 0;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0;
+  border: 1px solid #eaeaea;
+  font-size: 1rem;
+  background: #fafafa;
+  color: #111;
+  transition: border 0.2s;
+  &:focus {
+    border: 1px solid #0070f3;
+    outline: none;
+  }
+`;
+
 function Header() {
   const { cart, cartPopup, openCartPopup, closeCartPopup } = useCart();
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [bouncing, setBouncing] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
@@ -182,7 +249,9 @@ function Header() {
         </NavLink>
       </Nav>
       <SearchBar type="text" placeholder="Search products..." />
-      <div style={{ position: "relative" }}>
+      <div
+        style={{ display: "flex", alignItems: "center", position: "relative" }}
+      >
         <Cart
           to="#"
           tabIndex={0}
@@ -197,8 +266,54 @@ function Header() {
           </CartIconWrap>
           <CartCount>{count}</CartCount>
         </Cart>
+        {!mobileOpen && (
+          <Burger
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <FaBars size={28} color="#0070f3" />
+          </Burger>
+        )}
         <CartPopup open={cartPopup} onClose={closeCartPopup} />
       </div>
+      <MobileMenu open={mobileOpen}>
+        <Burger
+          aria-label="Close menu"
+          onClick={() => setMobileOpen(false)}
+          style={{ alignSelf: "flex-end", marginBottom: "1.5rem" }}
+        >
+          <FaTimes size={28} color="#0070f3" />
+        </Burger>
+        <MobileSearchBar type="text" placeholder="Search products..." />
+        <MobileNav>
+          <NavLink
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className={location.pathname === "/" ? "active" : ""}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/products"
+            onClick={() => setMobileOpen(false)}
+            className={
+              location.pathname.startsWith("/products") ||
+              location.pathname.startsWith("/product")
+                ? "active"
+                : ""
+            }
+          >
+            Products
+          </NavLink>
+          <NavLink
+            to="/cart"
+            onClick={() => setMobileOpen(false)}
+            className={location.pathname === "/cart" ? "active" : ""}
+          >
+            Cart
+          </NavLink>
+        </MobileNav>
+      </MobileMenu>
     </HeaderContainer>
   );
 }
