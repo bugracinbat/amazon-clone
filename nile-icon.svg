@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#0070f3"/>
+  
+  <!-- Shopping bag shape -->
+  <path d="M20 28 L20 48 Q20 52 24 52 L40 52 Q44 52 44 48 L44 28" 
+        fill="none" 
+        stroke="white" 
+        stroke-width="3" 
+        stroke-linecap="round"/>
+  
+  <!-- Bag handle -->
+  <path d="M26 28 L26 24 Q26 16 32 16 Q38 16 38 24 L38 28" 
+        fill="none" 
+        stroke="white" 
+        stroke-width="3" 
+        stroke-linecap="round"/>
+  
+  <!-- Sparkle decoration -->
+  <circle cx="48" cy="16" r="2" fill="#ffd814"/>
+  <circle cx="52" cy="20" r="1.5" fill="#ffd814"/>
+  <circle cx="46" cy="22" r="1" fill="#ffd814"/>
+</svg>
