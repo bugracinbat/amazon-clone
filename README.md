@@ -1,10 +1,13 @@
-# Mercel Market 🛍️
+# The Nile 🌊
 
 ![Screenshot](screenshot.png)
 
-Discover. Shop. Smile. ✨
+## 🔗 Live Demo
+**[View Live Demo](https://bugracinbat.github.io/amazon-clone/)** 
 
-Welcome to Mercel Market, a modern Amazon-inspired shopping experience built with React and Vite. Dive into a world of deals, discover unique products, and enjoy a seamless shopping experience!
+Flow Into Great Deals 💧
+
+Welcome to The Nile, a modern Amazon-inspired shopping experience built with React and Vite. Navigate through endless deals, discover amazing products, and let The Nile carry you to shopping paradise!
 
 ## Features
 
@@ -25,7 +28,7 @@ Welcome to Mercel Market, a modern Amazon-inspired shopping experience built wit
    npm run dev
    ```
 3. **Open your browser:**
-   Visit [http://localhost:5173](http://localhost:5173) to explore Mercel Market.
+   Visit [http://localhost:5173](http://localhost:5173) to explore The Nile.
 
 ## Project Structure
 
@@ -35,7 +38,7 @@ Welcome to Mercel Market, a modern Amazon-inspired shopping experience built wit
 
 ## Customization
 
-You can easily update products, styles, and branding to make Mercel Market your own.
+You can easily update products, styles, and branding to make The Nile your own.
 
 ---
 
