@@ -1,8 +1,16 @@
 import styled from "styled-components";
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaBars,
+  FaTimes,
+  FaSearch,
+  FaClock,
+  FaArrowLeft,
+} from "react-icons/fa";
 import { useCart } from "./CartContext";
+import { useSearch } from "./SearchContext";
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import CartPopup from "./CartPopup";
 import { keyframes } from "styled-components";
 
@@ -98,23 +106,219 @@ const NavLink = styled(Link)`
   }
 `;
 
-const SearchBar = styled.input`
+const SearchContainer = styled.div`
   flex: 1;
-  margin: 0 2rem;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0;
-  border: 1px solid #eaeaea;
-  font-size: 1rem;
-  background: #fafafa;
-  color: #111;
-  transition: border 0.2s;
-  &:focus {
-    border: 1px solid #0070f3;
-    outline: none;
+  margin: 0 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  @media (max-width: 1024px) {
+    max-width: 300px;
+    margin: 0 0.5rem;
   }
   @media (max-width: 768px) {
     display: none;
   }
+`;
+
+const SearchInputWrapper = styled.div`
+  flex: 1;
+  position: relative;
+`;
+
+const SearchBar = styled.input`
+  width: 100%;
+  padding: 0.7rem 1rem 0.7rem 2.5rem;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #eaeaea;
+  border-right: none;
+  font-size: 1rem;
+  background: #fafafa;
+  color: #111;
+  transition: border 0.2s, box-shadow 0.2s;
+  &:focus {
+    border: 1px solid #0070f3;
+    border-right: none;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+  }
+  @media (max-width: 1024px) {
+    padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+    font-size: 0.9rem;
+  }
+`;
+
+const SearchButton = styled.button`
+  padding: 0.7rem 0.6rem;
+  border: 1px solid #eaeaea;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  background: #f8f9fa;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  &:hover {
+    background: #0070f3;
+    color: white;
+    border-color: #0070f3;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+  }
+  @media (max-width: 1024px) {
+    padding: 0.6rem 0.5rem;
+    width: 36px;
+  }
+`;
+
+const SearchIcon = styled(FaSearch)`
+  position: absolute;
+  left: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+  font-size: 0.9rem;
+  @media (max-width: 1024px) {
+    left: 0.6rem;
+    font-size: 0.8rem;
+  }
+`;
+
+const SearchDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #eaeaea;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  display: ${({ $show }) => ($show ? "block" : "none")};
+`;
+
+const SearchSection = styled.div`
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const SearchSectionTitle = styled.div`
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
+const SearchItem = styled.div`
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  transition: background 0.2s;
+  background: ${({ $selected }) => ($selected ? "#e3f2fd" : "transparent")};
+  &:hover {
+    background: ${({ $selected }) => ($selected ? "#e3f2fd" : "#f8f9fa")};
+  }
+`;
+
+const SearchItemIcon = styled.div`
+  color: #888;
+  font-size: 0.9rem;
+`;
+
+const SearchItemText = styled.div`
+  flex: 1;
+  color: #333;
+`;
+
+const ClearHistoryButton = styled.button`
+  background: none;
+  border: none;
+  color: #0070f3;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  width: 100%;
+  &:hover {
+    background: #f8f9fa;
+  }
+`;
+
+const MobileSearchContainer = styled.div`
+  margin: 1.5rem 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const MobileSearchInputWrapper = styled.div`
+  flex: 1;
+  position: relative;
+`;
+
+const MobileSearchBar = styled.input`
+  width: 100%;
+  padding: 0.7rem 1.2rem 0.7rem 3rem;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  font-size: 1rem;
+  background: #fafafa;
+  color: #111;
+  transition: border 0.2s, box-shadow 0.2s;
+  &:focus {
+    border: 1px solid #0070f3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+  }
+`;
+
+const MobileSearchButton = styled.button`
+  padding: 0.7rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  &:hover {
+    background: #0070f3;
+    color: white;
+    border-color: #0070f3;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+  }
+`;
+
+const MobileSearchIcon = styled(FaSearch)`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
 `;
 
 const Cart = styled(Link)`
@@ -196,28 +400,36 @@ const MobileNav = styled.nav`
   margin-top: 2rem;
 `;
 
-const MobileSearchBar = styled.input`
-  margin: 1.5rem 0 0.5rem 0;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0;
-  border: 1px solid #eaeaea;
-  font-size: 1rem;
-  background: #fafafa;
-  color: #111;
-  transition: border 0.2s;
-  &:focus {
-    border: 1px solid #0070f3;
-    outline: none;
-  }
-`;
-
 function Header() {
   const { cart, cartPopup, openCartPopup, closeCartPopup } = useCart();
+  const {
+    searchQuery,
+    setSearchQuery,
+    searchHistory,
+    getSearchSuggestions,
+    performSearch,
+    clearSearchHistory,
+    isSearching,
+  } = useSearch();
+
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [bouncing, setBouncing] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
+  const [mobileSearchQuery, setMobileSearchQuery] = useState(searchQuery);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const searchRef = useRef(null);
+  const mobileSearchRef = useRef(null);
+
+  // Initialize local search queries from context on mount
+  useEffect(() => {
+    setLocalSearchQuery(searchQuery);
+    setMobileSearchQuery(searchQuery);
+  }, []); // Only run on mount
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
@@ -234,6 +446,89 @@ function Header() {
     window.addEventListener("cart-bounce", bounce);
     return () => window.removeEventListener("cart-bounce", bounce);
   }, []);
+
+  const handleSearch = (query) => {
+    if (query.trim()) {
+      setSearchQuery(query); // Update context when search is performed
+      performSearch(query);
+      setShowSearchDropdown(false);
+      setMobileOpen(false);
+    }
+  };
+
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setLocalSearchQuery(value);
+    setShowSearchDropdown(value.length > 0);
+  };
+
+  const handleMobileSearchInputChange = (e) => {
+    const value = e.target.value;
+    setMobileSearchQuery(value);
+  };
+
+  const handleSearchKeyPress = (e) => {
+    const suggestions = getSearchSuggestions(localSearchQuery);
+    const allItems = [
+      ...suggestions,
+      ...searchHistory.slice(0, 5).map((h) => h.query),
+    ];
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedSuggestionIndex((prev) =>
+        prev < allItems.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedSuggestionIndex((prev) => (prev > -1 ? prev - 1 : -1));
+    } else if (e.key === "Enter") {
+      if (selectedSuggestionIndex >= 0 && allItems[selectedSuggestionIndex]) {
+        handleSearch(allItems[selectedSuggestionIndex]);
+      } else {
+        handleSearch(localSearchQuery);
+      }
+      setSelectedSuggestionIndex(-1);
+    } else if (e.key === "Escape") {
+      setShowSearchDropdown(false);
+      setSelectedSuggestionIndex(-1);
+    } else {
+      setSelectedSuggestionIndex(-1);
+    }
+  };
+
+  const handleMobileSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(mobileSearchQuery);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setLocalSearchQuery(suggestion);
+    setMobileSearchQuery(suggestion);
+    handleSearch(suggestion);
+  };
+
+  const handleHistoryClick = (historyItem) => {
+    setLocalSearchQuery(historyItem.query);
+    setMobileSearchQuery(historyItem.query);
+    handleSearch(historyItem.query);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const suggestions = getSearchSuggestions(localSearchQuery);
+
   return (
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
@@ -277,7 +572,69 @@ function Header() {
           Cart
         </NavLink>
       </Nav>
-      <SearchBar type="text" placeholder="Search products..." />
+
+      <SearchContainer ref={searchRef}>
+        <SearchInputWrapper>
+          <SearchIcon />
+          <SearchBar
+            type="text"
+            placeholder="Search products..."
+            value={localSearchQuery}
+            onChange={handleSearchInputChange}
+            onKeyPress={handleSearchKeyPress}
+            onFocus={() => setShowSearchDropdown(localSearchQuery.length > 0)}
+          />
+          <SearchDropdown $show={showSearchDropdown}>
+            {suggestions.length > 0 && (
+              <SearchSection>
+                <SearchSectionTitle>Suggestions</SearchSectionTitle>
+                {suggestions.map((suggestion, index) => (
+                  <SearchItem
+                    key={index}
+                    $selected={selectedSuggestionIndex === index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    <SearchItemIcon>
+                      <FaSearch />
+                    </SearchItemIcon>
+                    <SearchItemText>{suggestion}</SearchItemText>
+                  </SearchItem>
+                ))}
+              </SearchSection>
+            )}
+
+            {searchHistory.length > 0 && (
+              <SearchSection>
+                <SearchSectionTitle>Recent Searches</SearchSectionTitle>
+                {searchHistory.slice(0, 5).map((historyItem, index) => (
+                  <SearchItem
+                    key={index}
+                    $selected={
+                      selectedSuggestionIndex === suggestions.length + index
+                    }
+                    onClick={() => handleHistoryClick(historyItem)}
+                  >
+                    <SearchItemIcon>
+                      <FaClock />
+                    </SearchItemIcon>
+                    <SearchItemText>{historyItem.query}</SearchItemText>
+                  </SearchItem>
+                ))}
+                <ClearHistoryButton onClick={clearSearchHistory}>
+                  Clear search history
+                </ClearHistoryButton>
+              </SearchSection>
+            )}
+          </SearchDropdown>
+        </SearchInputWrapper>
+        <SearchButton
+          onClick={() => handleSearch(localSearchQuery)}
+          aria-label="Search"
+        >
+          <FaSearch />
+        </SearchButton>
+      </SearchContainer>
+
       <div
         style={{ display: "flex", alignItems: "center", position: "relative" }}
       >
@@ -313,7 +670,24 @@ function Header() {
         >
           <FaTimes size={28} color="#0070f3" />
         </Burger>
-        <MobileSearchBar type="text" placeholder="Search products..." />
+        <MobileSearchContainer>
+          <MobileSearchInputWrapper ref={mobileSearchRef}>
+            <MobileSearchIcon />
+            <MobileSearchBar
+              type="text"
+              placeholder="Search products..."
+              value={mobileSearchQuery}
+              onChange={handleMobileSearchInputChange}
+              onKeyPress={handleMobileSearchKeyPress}
+            />
+          </MobileSearchInputWrapper>
+          <MobileSearchButton
+            onClick={() => handleSearch(mobileSearchQuery)}
+            aria-label="Search"
+          >
+            <FaSearch />
+          </MobileSearchButton>
+        </MobileSearchContainer>
         <MobileNav>
           <NavLink
             to="/"
