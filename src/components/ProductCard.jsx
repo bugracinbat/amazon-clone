@@ -8,15 +8,6 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: none; }
 `;
 
-const cardBounce = keyframes`
-  0% { transform: scale(1); }
-  20% { transform: scale(1.08); }
-  40% { transform: scale(0.96); }
-  60% { transform: scale(1.04); }
-  80% { transform: scale(0.98); }
-  100% { transform: scale(1); }
-`;
-
 const Card = styled.div`
   background: #fff;
   border-radius: 18px;

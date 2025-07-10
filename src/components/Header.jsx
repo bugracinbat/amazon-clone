@@ -426,6 +426,7 @@ function Header() {
   useEffect(() => {
     setLocalSearchQuery(searchQuery);
     setMobileSearchQuery(searchQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
 
   useEffect(() => {
@@ -435,6 +436,7 @@ function Header() {
   }, []);
   useEffect(() => {
     closeCartPopup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
   useEffect(() => {
     const bounce = () => {

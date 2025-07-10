@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-const products = Array.from({ length: 20 }, (_, i) => ({
+const products = Array.from({ length: 20 }, () => ({
   id: faker.string.uuid(),
   title: faker.commerce.productName(),
   description: faker.commerce.productDescription(),

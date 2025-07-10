@@ -133,7 +133,7 @@ const ThankYou = styled.div`
 `;
 
 function Cart() {
-  const { cart, removeFromCart, addToCart, setQty, clearCart } = useCart();
+  const { cart, removeFromCart, setQty, clearCart } = useCart();
   const [checkedOut, setCheckedOut] = useState(false);
   const total = cart
     .reduce((sum, item) => sum + Number(item.price) * item.qty, 0)

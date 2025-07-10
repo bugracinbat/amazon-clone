@@ -69,8 +69,6 @@ export const SearchProvider = ({ children }) => {
       // Sort by relevance when searching
       if (filters.sortBy === "relevance") {
         results.sort((a, b) => {
-          const aText = `${a.title} ${a.description}`.toLowerCase();
-          const bText = `${b.title} ${b.description}`.toLowerCase();
           const queryLower = query.toLowerCase();
 
           // Prioritize title matches over description matches
