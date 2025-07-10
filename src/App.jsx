@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <CartProvider>
-      <Router>
+      <Router basename="/amazon-clone">
         <SearchProvider>
           <Header />
           <Routes>
