@@ -1,4 +1,4 @@
-import styled, { keyframes, css } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   FaShoppingCart,
   FaBars,
@@ -408,7 +408,6 @@ function Header() {
     getSearchSuggestions,
     performSearch,
     clearSearchHistory,
-    isSearching,
   } = useSearch();
 
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
