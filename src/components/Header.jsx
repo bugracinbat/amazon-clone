@@ -12,6 +12,7 @@ import { useSearch } from "./SearchContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import CartPopup from "./CartPopup";
+import MercelIcon from "./MercelIcon";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -37,24 +38,6 @@ const LogoWrap = styled(Link)`
   align-items: center;
   gap: 0.7rem;
   text-decoration: none;
-`;
-
-const Triangle = styled.div`
-  width: 28px;
-  height: 28px;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &::before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-bottom: 28px solid #111;
-  }
 `;
 
 const LogoText = styled.span`
@@ -390,6 +373,9 @@ const MobileMenu = styled.div`
   padding: 2.5rem 1.5rem 1.5rem 1.5rem;
   transform: translateX(${({ open }) => (open ? "0" : "100%")});
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @media (min-width: 769px) {
+    display: none;
+  }
 `;
 
 const MobileNav = styled.nav`
@@ -532,7 +518,7 @@ function Header() {
   return (
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
-        <Triangle />
+        <MercelIcon />
         <div
           style={{
             display: "flex",
