@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import {
   FaShoppingCart,
   FaBars,
@@ -12,7 +12,6 @@ import { useSearch } from "./SearchContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import CartPopup from "./CartPopup";
-import { keyframes } from "styled-components";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -352,7 +351,7 @@ const cartBounce = keyframes`
 
 const CartIconWrap = styled.span`
   display: inline-block;
-  ${({ $bouncing }) => $bouncing && `animation: ${cartBounce} 0.6s;`}
+  animation: ${({ $bouncing }) => ($bouncing ? cartBounce : "none")} 0.6s;
 `;
 
 const Burger = styled.button`
