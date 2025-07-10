@@ -13,7 +13,7 @@ const StyledSvg = styled.svg`
   height: 100%;
 `;
 
-function MercelIcon() {
+function NileIcon() {
   return (
     <IconWrapper>
       <StyledSvg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -44,4 +44,4 @@ function MercelIcon() {
   );
 }
 
-export default MercelIcon;
+export default NileIcon;

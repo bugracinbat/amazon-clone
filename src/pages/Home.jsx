@@ -46,14 +46,14 @@ function Home() {
   return (
     <Container>
       <CreativeTitle>
-        Your Next Favorite Find Awaits{" "}
-        <span role="img" aria-label="shopping bags">
-          🛍️
+        Flow Into Your Next Great Find{" "}
+        <span role="img" aria-label="water wave">
+          🌊
         </span>
       </CreativeTitle>
       <CreativeDesc>
-        Dive into a world of deals, discover unique products, and enjoy a
-        seamless shopping experience!
+        Navigate through endless deals, discover amazing products, and let The Nile 
+        carry you to shopping paradise!
       </CreativeDesc>
       <Grid>
         {products.map((product) => (

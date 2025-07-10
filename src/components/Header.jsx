@@ -12,7 +12,7 @@ import { useSearch } from "./SearchContext";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import CartPopup from "./CartPopup";
-import MercelIcon from "./MercelIcon";
+import NileIcon from "./NileIcon";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -518,7 +518,7 @@ function Header() {
   return (
     <HeaderContainer $scrolled={scrolled}>
       <LogoWrap to="/">
-        <MercelIcon />
+        <NileIcon />
         <div
           style={{
             display: "flex",
@@ -527,11 +527,11 @@ function Header() {
             lineHeight: 1.1,
           }}
         >
-          <LogoText>Mercel Market</LogoText>
+          <LogoText>The Nile</LogoText>
           <Tagline>
-            Discover. Shop. Smile.{" "}
-            <span role="img" aria-label="sparkles">
-              ✨
+            Flow Into Great Deals{" "}
+            <span role="img" aria-label="water drop">
+              💧
             </span>
           </Tagline>
         </div>
